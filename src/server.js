@@ -1,5 +1,10 @@
-import express from "express";
-import { router } from "./routes/index.js";
+require("dotenv/config");
+const express = require("express");
+require("express-async-errors");
+const { router } = require("./routes");
+const { AppError } = require("./error/AppError");
+const { sequelize } = require("./database/sequelize");
+require("./database/associations");
 
 
 const app = express();
@@ -7,6 +12,20 @@ app.use(express.json());
 
 app.use(router);
 
-app.listen(3000, () => {
+app.use((error, request, response, next) => {
+   if(error instanceof AppError){
+      return response.status(error.status).json({
+         message: error.message
+      });
+   }
+
+   return response.status(500).json({
+      message: "Erro interno do servidor."
+   });
+
+});
+
+app.listen(3333, async () => {
+   await sequelize.sync();
    console.log("Servidor iniciado!");
 });

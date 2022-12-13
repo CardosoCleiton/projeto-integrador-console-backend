@@ -1,13 +1,15 @@
-import { CreateUserService } from "../../services/user/CreateUserService.js";
+const { CreateUserService } = require("../../services/user/CreateUserService.js");
 
-export class CreateUserController{
-   handle(request, response){
-      const { nome, email, password, data_nascimento } = request.body;
+class CreateUserController{
+   async handle(request, response){
+      const { name, email, password, cpf, birth_date, address_id  } = request.body;
       
       const createUserService = new CreateUserService();
 
-      const user = createUserService.execute(nome, email, password, data_nascimento);
+      const user = await createUserService.execute(name, email, password, cpf, birth_date, address_id);
 
-      return response.json(user);
+      return response.status(201).json(user);
    }
 }
+
+module.exports = { CreateUserController }
