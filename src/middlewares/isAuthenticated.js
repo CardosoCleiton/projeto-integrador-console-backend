@@ -5,7 +5,6 @@ const { AppError } = require("../error/AppError");
 async function isAuthenticated(request, response, next){
 
    const authHeader = request.headers.authorization;
-   console.log(authHeader);
    if(!authHeader){
       throw new AppError("Token obrigatório");
    }

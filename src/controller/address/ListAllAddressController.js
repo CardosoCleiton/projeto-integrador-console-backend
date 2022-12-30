@@ -1,4 +1,4 @@
-const { ListAllAddressService } = require("../../services/user/ListAllAddressService");
+const { ListAllAddressService } = require("../../services/address/ListAllAddressService");
 
 class ListAllAddressController{
    async handle(request, response){

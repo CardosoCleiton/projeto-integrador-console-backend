@@ -1,4 +1,4 @@
-const { CreateAddressService } = require("../../services/user/CreateAddressService");
+const { CreateAddressService } = require("../../services/address/CreateAddressService");
 
 class CreateAddressController{
    async handle(request, response){
