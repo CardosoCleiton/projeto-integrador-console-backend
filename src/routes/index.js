@@ -4,6 +4,7 @@ const { addressRoutes } = require("./address.routes");
 const { employeeRoutes } = require("./employee.routes");
 const { categoryRoutes } = require("./category.routes");
 const { productRoutes } = require("./product.routes");
+const { packagingRoutes } = require("./packaging.routes");
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use("/address", addressRoutes);
 router.use("/employees", employeeRoutes);
 router.use("/categories", categoryRoutes);
 router.use("/products", productRoutes);
+router.use("/packagings", packagingRoutes);
 
 module.exports = { router }

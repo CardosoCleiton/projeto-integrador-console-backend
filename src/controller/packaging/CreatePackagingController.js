@@ -1,4 +1,4 @@
-const { CreatePackagingService } = require("../../services/product/CreatePackagingService");
+const { CreatePackagingService } = require("../../services/packaging/CreatePackagingService");
 
 class CreatePackagingController{
    async handle(request, response){
