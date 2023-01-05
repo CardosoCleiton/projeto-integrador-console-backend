@@ -23,3 +23,4 @@ Product.belongsTo(Employee);
 //1 Categoria tem varios produtos, 1 produto pertence a uma categoria.
 Category.hasMany(Product);
 Product.belongsTo(Category);
+//1 Produto tem varias imagems e 1 imagem pertence a um produto.

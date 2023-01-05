@@ -8,7 +8,6 @@ const { ListAllProductController } = require("../controller/product/ListAllProdu
 
 const productRoutes = Router();
 
-
 //Produto
 const createProductController = new CreateProductController();
 const updateProductController = new UpdateProductController();
