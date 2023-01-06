@@ -8,4 +8,4 @@ class GetProfileService {
     }
 }
 
-module.export = {GetProfileService}
+module.exports = {GetProfileService}
