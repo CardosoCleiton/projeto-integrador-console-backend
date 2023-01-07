@@ -7,6 +7,7 @@ const { CreateProductController } = require("../controller/product/CreateProduct
 const { UpdateProductController } = require("../controller/product/UpdateProductController");
 const { FindProductByIdController } = require("../controller/product/FindProductByIdController");
 const { ListAllProductController } = require("../controller/product/ListAllProductController");
+const { CalculateProductFreightController } = require("../controller/product/CalculateProductFreightController");
 
 const upload = multer(uploadConfig.upload("products"));
 
@@ -17,10 +18,12 @@ const createProductController = new CreateProductController();
 const updateProductController = new UpdateProductController();
 const findProductByIdController = new FindProductByIdController();
 const listAllProductsController = new ListAllProductController();
+const calculateProductFreightController = new CalculateProductFreightController();
 
 productRoutes.get("/", listAllProductsController.handle);
 productRoutes.post("/", isAuthenticated, isAdmin, upload.array('file'), createProductController.handle);
 productRoutes.put("/:id", isAuthenticated, isAdmin, updateProductController.handle);
 productRoutes.get("/:id", findProductByIdController.handle);
+productRoutes.post("/:id/freight", calculateProductFreightController.handle);
 
 module.exports = { productRoutes }

@@ -1,0 +1,22 @@
+const Correios = require("node-correios");
+const correios = new Correios();
+
+class Freight{
+   async calculateDeadline({sCepOrigem, nCdServico, sCepDestino, nVlPeso, nCdFormato, nVlComprimento, nVlAltura, nVlLargura, nVlDiametro}){
+      const args = {
+         nCdServico: nCdServico,
+         sCepOrigem: sCepOrigem,
+         sCepDestino: sCepDestino,
+         nVlPeso: nVlPeso,
+         nCdFormato: nCdFormato,
+         nVlComprimento: nVlComprimento,
+         nVlAltura: nVlAltura,
+         nVlLargura: nVlLargura,
+         nVlDiametro: nVlDiametro
+      }
+      const deadline = await correios.calcPrecoPrazo(args);
+      return deadline;
+   }
+}
+
+module.exports = { Freight }

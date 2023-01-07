@@ -5,6 +5,7 @@ const { Product } = require("./models/Product");
 const { Packaging } = require("./models/Packaging");
 const { Category } = require("./models/Category");
 const { ImageProduct } = require("./models/ImageProduct");
+const { Order } = require("./models/Order");
 
 // Usuário tem muitos endereços e um endereço pertence a um usuário.
 User.hasMany(Address);
@@ -27,3 +28,11 @@ Product.belongsTo(Category);
 //1 Produto tem varias imagems e 1 imagem pertence a um produto.
 Product.hasMany(ImageProduct);
 ImageProduct.belongsTo(Product);
+
+//Product
+//1 usuario faz varios pedidos, e o pedido pertence a 1 usuário
+User.hasMany(Order);
+Order.belongsTo(User);
+//1 pedido possui 1 endereço, e um endereço pode pertence a varios pedidos.
+Address.hasMany(Address);
+Order.belongsTo(Address);
