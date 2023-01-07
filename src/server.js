@@ -4,6 +4,7 @@ require("express-async-errors");
 const { router } = require("./routes");
 const { AppError } = require("./error/AppError");
 const { sequelize } = require("./database/sequelize");
+const { resolve } = require("path");
 require("./database/associations");
 
 
@@ -11,6 +12,8 @@ const app = express();
 app.use(express.json());
 
 app.use(router);
+
+app.use("/images/products", express.static(resolve(__dirname, "..", "tmp", "products")))
 
 app.use((error, request, response, next) => {
    if(error instanceof AppError){

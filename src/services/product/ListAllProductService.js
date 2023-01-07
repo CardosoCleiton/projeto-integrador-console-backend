@@ -1,4 +1,5 @@
 const { Product } = require("../../database/models/Product");
+const { ImageProduct } = require("../../database/models/ImageProduct");
 
 class ListAllProductService{
    async execute({page, limit}){
@@ -18,7 +19,12 @@ class ListAllProductService{
 
       const products = await Product.findAndCountAll({
          limit: limit,
-         offset: offset
+         offset: offset,
+         attributes: ["id", "name", "description", "price", "createdAt", "updatedAt", "packagingId", "categoryId"],
+         include: [{
+            model: ImageProduct,
+            attributes: ["id", "name"]
+         }]
       });
       
       let next = true;
@@ -37,7 +43,13 @@ class ListAllProductService{
                weight: product.weight,
                createdAt: product.createdAt,
                updatedAt: product.updatedAt,
-               categoryId: product.categoryId
+               categoryId: product.categoryId,
+               "image-products": product["image-products"].map(image => {
+                  return {
+                     id: image.id,
+                     name: image.name
+                  }
+               })
             }
          })
       }
