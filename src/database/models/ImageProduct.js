@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../sequelize");
 
-const ImageProduct = sequelize.define("image-product", {
+const ImageProduct = sequelize.define("image_product", {
    id: {
       type: DataTypes.STRING,
       allowNull: false,

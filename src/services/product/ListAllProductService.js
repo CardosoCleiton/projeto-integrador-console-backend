@@ -44,7 +44,7 @@ class ListAllProductService{
                createdAt: product.createdAt,
                updatedAt: product.updatedAt,
                categoryId: product.categoryId,
-               "image-products": product["image-products"].map(image => {
+               "image_products": product["image_products"].map(image => {
                   return {
                      id: image.id,
                      name: image.name

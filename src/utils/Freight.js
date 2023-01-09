@@ -1,3 +1,4 @@
+const { AppError } = require("../error/AppError");
 const Correios = require("node-correios");
 const correios = new Correios();
 
@@ -14,8 +15,13 @@ class Freight{
          nVlLargura: nVlLargura,
          nVlDiametro: nVlDiametro
       }
-      const deadline = await correios.calcPrecoPrazo(args);
-      return deadline;
+      try{
+         const deadline = await correios.calcPrecoPrazo(args);
+         return deadline;
+      }catch(error){
+         console.log(error);
+         throw new AppError("Erro ao calcular frete.");
+      }
    }
 }
 

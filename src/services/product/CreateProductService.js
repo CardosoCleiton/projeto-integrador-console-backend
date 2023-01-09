@@ -34,7 +34,8 @@ class CreateProductService{
          packagingId: properties.packagingId,
          categoryId: properties.categoryId,
          weight: properties.weight,
-         employeeId: properties.employeeId
+         employeeId: properties.employeeId,
+         stock: properties.stock
       });
 
       for(let imageName of properties.files){

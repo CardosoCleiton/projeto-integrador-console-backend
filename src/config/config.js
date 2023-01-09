@@ -4,4 +4,8 @@ const freightConfig = {
    pacCode: process.env.PAC_CODE ?? "04510"
 }
 
-module.exports = { freightConfig }
+const mercadoPagoConfig = {
+   accessToken: process.env.MP_ACCESS_TOKEN ?? ""
+}
+
+module.exports = { freightConfig, mercadoPagoConfig }

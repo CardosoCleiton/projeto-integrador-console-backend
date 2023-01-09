@@ -11,6 +11,10 @@ const Order = sequelize.define("order", {
       type: DataTypes.DATE,
       allowNull: false
    },
+   payment_id: {
+      type: DataTypes.STRING,
+      allowNull: false
+   },
    payment_status: {
       type: DataTypes.STRING,
       allowNull: false

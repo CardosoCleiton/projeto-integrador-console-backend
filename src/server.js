@@ -5,10 +5,12 @@ const { router } = require("./routes");
 const { AppError } = require("./error/AppError");
 const { sequelize } = require("./database/sequelize");
 const { resolve } = require("path");
+const cors = require("cors");
 require("./database/associations");
 
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use(router);

@@ -9,7 +9,8 @@ class CreateProductController{
          price,
          packagingId,
          categoryId,
-         weight
+         weight,
+         stock
       } = request.body;
 
       if(!request.files.length > 0){
@@ -28,6 +29,7 @@ class CreateProductController{
          categoryId,
          weight,
          employeeId,
+         stock,
          files
       });
 
