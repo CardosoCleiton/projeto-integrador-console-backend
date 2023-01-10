@@ -1,7 +1,7 @@
 const { Product } = require("../../database/models/Product");
 const { AppError } = require("../../error/AppError");
 const { Packaging } = require("../../database/models/Packaging");
-const { Freight } = require("../../utils/Freight");
+const { Freight } = require("../../providers/Freight");
 const { freightConfig } = require("../../config/config");
 
 class CalculateProductFreightService{
