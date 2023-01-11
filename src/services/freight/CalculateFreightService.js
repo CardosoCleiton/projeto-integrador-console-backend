@@ -2,25 +2,35 @@ const { Product } = require("../../database/models/Product");
 const { Packaging } = require("../../database/models/Packaging");
 const { Freight } = require("../../providers/Freight");
 const { freightConfig } = require("../../config/config");
+const { AppError } = require("../../error/AppError");
 
 class CalculateFreightService{
    async execute(freightData){
       
       const products = [];
       for(let item of freightData.items){
-         const product = await Product.findOne({
-            where: {
-               id: item.productId
-            },
-            include: Packaging
-         });
-         
-         if(!product){
-            throw new AppError(`Não foi encontrado nenhum produto com ID ${item.productId}`);
+
+         if(isNaN(item.quantity) || item.quantity < 0){
+            throw new AppError("Os valores incluidos como quantidade não são validos.");
          }
 
-         product.quantity = item.quantity;
-         products.push(product);
+         try{
+            const product = await Product.findOne({
+               where: {
+                  id: item.productId
+               },
+               include: Packaging
+            });
+            
+            if(!product){
+               throw new AppError(`Não foi encontrado nenhum produto com ID ${item.productId}`);
+            }
+   
+            product.quantity = item.quantity;
+            products.push(product);
+         }catch(error){
+            throw new AppError("Erro ao buscar produto");
+         }
       }
       
       const freight = new Freight();
