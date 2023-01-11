@@ -5,22 +5,24 @@ const { freightConfig } = require("../../config/config");
 
 class CalculateFreightService{
    async execute(freightData){
-
+      
       const products = [];
-      for(let item of products.items){
+      for(let item of freightData.items){
          const product = await Product.findOne({
             where: {
                id: item.productId
             },
             include: Packaging
          });
+         
          if(!product){
             throw new AppError(`Não foi encontrado nenhum produto com ID ${item.productId}`);
          }
-         products.quantity = item.quantity;
+
+         product.quantity = item.quantity;
          products.push(product);
       }
-
+      
       const freight = new Freight();
       const priceFreightProducts = [];
 
@@ -29,7 +31,7 @@ class CalculateFreightService{
          const freightInfoSedex = await freight.calculateDeadline({
             sCepOrigem: freightConfig.cepOrigin,
             nCdServico: freightConfig.sedexCode,
-            sCepDestino: zip,
+            sCepDestino: freightData.address.zip,
             nVlPeso: (parseFloat(priceFreightProduct.weight) + parseFloat(priceFreightProduct.packaging.weight)).toString(),
             nCdFormato: priceFreightProduct.packaging.format,
             nVlComprimento: priceFreightProduct.packaging.length,
@@ -41,19 +43,25 @@ class CalculateFreightService{
          if(freightInfoSedex[0].MsgErro){
             throw new AppError(freightInfoSedex[0].MsgErro);
          }
-
+         
          const priceSedex = {
             type: "Correios - SEDEX",
             typeId: freightConfig.sedexCode,
-            price: parsetFloat(freightInfoSedex[0].Valor.replace(",", ".")) * priceFreightProduct.quantity,
+            price: parseFloat(freightInfoSedex[0].Valor.replace(",", ".")) * priceFreightProduct.quantity,
             deadline: freightInfoSedex[0].PrazoEntrega
          };
-         priceFreightProducts.push(priceSedex);
+
+         const indexSedex = priceFreightProducts.findIndex(element => element.typeId === priceSedex.typeId);
+         if(indexSedex >= 0){
+            priceFreightProducts[indexSedex].price = priceFreightProducts[indexSedex].price + priceSedex.price;
+         }else{
+            priceFreightProducts.push(priceSedex);
+         }
 
          const freightInfoPac = await freight.calculateDeadline({
             sCepOrigem: freightConfig.cepOrigin,
             nCdServico: freightConfig.pacCode,
-            sCepDestino: zip,
+            sCepDestino: freightData.address.zip,
             nVlPeso: (parseFloat(priceFreightProduct.weight) + parseFloat(priceFreightProduct.packaging.weight)).toString(),
             nCdFormato: priceFreightProduct.packaging.format,
             nVlComprimento: priceFreightProduct.packaging.length,
@@ -65,18 +73,32 @@ class CalculateFreightService{
          if(freightInfoPac[0].MsgErro){
             throw new AppError(freightInfoPac[0].MsgErro);
          }
-
+     
          const pricePac = {
             type: "Correios - PAC",
             typeId: freightConfig.pacCode,
-            price: parsetFloat(freightInfoPac[0].Valor.replace(",", ".")) * priceFreightProduct.quantity,
+            price: parseFloat(freightInfoPac[0].Valor.replace(",", ".")) * priceFreightProduct.quantity,
             deadline: freightInfoPac[0].PrazoEntrega
          };
-         priceFreightProducts.push(pricePac);
 
+         const indexPac = priceFreightProducts.findIndex(element => element.typeId === pricePac.typeId);
+         if(indexSedex >= 0){
+            priceFreightProducts[indexPac].price = priceFreightProducts[indexPac].price + pricePac.price;
+         }else{
+            priceFreightProducts.push(pricePac);
+         }
       }
 
-      return priceFreightProduct;
+      const formatPrice = priceFreightProducts.map(price => {
+         return {
+            type: price.type,
+            typeId: price.Id,
+            price: parseFloat(price.price.toFixed(2)),
+            deadline: price.deadline
+         }
+      })
+      
+      return formatPrice;
    }
 }
 
