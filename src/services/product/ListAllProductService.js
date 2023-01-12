@@ -1,5 +1,6 @@
 const { Product } = require("../../database/models/Product");
 const { ImageProduct } = require("../../database/models/ImageProduct");
+const { Op } = require("sequelize");
 
 class ListAllProductService{
    async execute({page, limit}){
@@ -11,7 +12,7 @@ class ListAllProductService{
 
       limit = parseInt(limit);
 
-      if(isNaN(page) || page == 1 || !page){
+      if(isNaN(page) || page == 1 || !page || page == 0){
          offset = 0;
       }else{
          offset = (parseInt(page) - 1) * limit;
@@ -24,7 +25,16 @@ class ListAllProductService{
          include: [{
             model: ImageProduct,
             attributes: ["id", "name"]
-         }]
+         }],
+         where: {
+            stock: {
+               [Op.gt]: 0
+            }
+         },
+         order: [
+            ['createdAt', 'desc'],
+            ['updatedAt', 'desc']
+         ]
       });
       
       let next = true;
