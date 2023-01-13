@@ -32,7 +32,7 @@ class CalculateFreightService{
             throw new AppError("Erro ao buscar produto");
          }
       }
-      
+
       const freight = new Freight();
       const priceFreightProducts = [];
 
@@ -102,11 +102,11 @@ class CalculateFreightService{
       const formatPrice = priceFreightProducts.map(price => {
          return {
             type: price.type,
-            typeId: price.Id,
+            typeId: price.typeId,
             price: parseFloat(price.price.toFixed(2)),
             deadline: price.deadline
          }
-      })
+      });
       
       return formatPrice;
    }
