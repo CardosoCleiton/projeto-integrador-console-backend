@@ -6,7 +6,7 @@ class CreateOrderController{
       const { id } = request.user;
       const createOrderService = new CreateOrderService();
       const order = await createOrderService.execute(paymentData, orderItems, freight, id);
-      return response.json(order);
+      return response.status(201).json(order);
    }
 }
 
