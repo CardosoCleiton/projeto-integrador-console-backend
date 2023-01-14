@@ -10,25 +10,32 @@ const { Address } = require("../../database/models/Address");
 const { sequelize } = require("../../database/sequelize");
 const { v4: uuidV4 } = require("uuid");
 const { freightConfig } = require("../../config/config");
-
+const { Op } = require("sequelize");
 
 class CreateOrderService{
    async execute(paymentData, orderItems, freight, userId){
+      const transaction = await sequelize.transaction();
       //Pegando todos os items
       const products = [];
       for(let item of orderItems){
         try{
           const findItem = await Product.findOne({
             where: {
-              id: item.productId
+              id: item.productId,
+              stock: {
+                [Op.gt]: 0
+             }
             },
             include: Packaging
           });
+
+          await findItem.decrement("stock", {by: item.quantity}, { transaction: transaction });
+
           findItem.quantity = item.quantity;
           products.push(findItem);
         }catch(error){
           console.log(error);
-          throw new AppError(`Não foi possível encontrar nenhum produto com ID ${item.productId}`);
+          throw new AppError(`Erro ao localizar produto. Certifique-se se o produto está disponível para compra.`);
         }
       }
 
@@ -76,7 +83,6 @@ class CreateOrderService{
       const paymentResponse = await mercadoPago.pay(totalPriceProduct, paymentData);
 
       //Criando Pedido
-      const transaction = await sequelize.transaction();
       try{
         const order = await Order.create({
           id: uuidV4(),

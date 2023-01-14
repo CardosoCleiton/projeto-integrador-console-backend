@@ -17,10 +17,11 @@
 - [x] Criar Pacote - Apenas usuários administradores.
   
 **Produto:**
-- [x] Criar Produto - Apenas usuário administradores.
+- [x] Criar Produto - Apenas usuários administradores.
 - [x] Buscar produto por ID.
 - [x] Listar Todos os produtos.
 - [x] Atualizar um produto.
+- [ ] Listar Produtos por categoria.
 
 **Pedido:**
 - [x] Criar Pedido - Apenas quando usuário estiver logado.
