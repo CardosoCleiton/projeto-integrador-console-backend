@@ -1,35 +1,33 @@
 # API do Projeto e-commerce Console.
 **Projeto Integrador - Digital House DH**
 
+## Serviços:
+**Usuário:**
+- [x] Criar usuário.
+- [x] Autenticar usuário.
+- [x] Exibir perfil do usuário - Apenas quando usuário estiver logado.
+  
+**Endereço:**
+- [x] Criar endereço - Apenas quando usuário estiver logado.
+- [x] Buscar endereço por ID - Apenas quando usuário estiver logado.
+- [x] Listar todos - Apenas quando usuário estiver logado.
+- [x] Atualizar endereço - Apenas quando usuário estiver logado.
+
+**Pacote:**
+- [x] Criar Pacote - Apenas usuários administradores.
+  
+**Produto:**
+- [x] Criar Produto - Apenas usuário administradores.
+- [x] Buscar produto por ID.
+- [x] Listar Todos os produtos.
+- [x] Atualizar um produto.
+
+**Pedido:**
+- [x] Criar Pedido - Apenas quando usuário estiver logado.
+- [ ] Listar Pedidos - Apenas quando usuário estiver logado.
+- [ ] Listar Pedido por ID - Apenas quando usuário estiver logado.
+  
+**Frete:**
+- [x] Calcular frete de 1 ou mais produtos.
+
 ### Observações: 
-##### Modelo de corpo da requisição POST para criar um novo pedido:
-<code>
-{
-   "paymentData": {
-      "token": "19b6f4f3fd9608d03ea96dafdae77968",
-      "issuer_id": "24",
-      "payment_method_id": "master",
-      "transaction_amount": 100.5,
-      "installments": 1,
-      "description": "Descrição do produto",
-      "payer": {
-         "email": "hyago.alves@outlook.com",
-         "identification": { "type": "CPF", "number": "02995399036" }
-      }
-   },
-   "orderItems": [
-      {
-         "productId": "23sds45684sad",
-         "quantity": 2
-      },
-      {
-         "productId": "23432454654",
-         "quantity": 1
-      }
-   ],
-   "freight": {
-      "addressId": "1235465",
-      "freightType": "12356
-   }
-}
-</code>
