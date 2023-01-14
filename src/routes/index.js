@@ -10,6 +10,12 @@ const { freightRoutes } = require("./freight.routes");
 
 const router = Router();
 
+router.get("/", (request, response) => {
+   return response.json({
+      message: "Hello Word"
+   });
+});
+
 router.use("/users", userRoutes);
 router.use("/address", addressRoutes);
 router.use("/employees", employeeRoutes);
