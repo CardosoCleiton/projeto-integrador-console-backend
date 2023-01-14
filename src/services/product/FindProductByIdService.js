@@ -16,7 +16,7 @@ class FindProductByIdService{
       });
    
       if(!product){
-         throw new AppError(`Não foi encontrado nenhum produto com o ID ${id}.`);
+         throw new AppError(`Erro ao localizar produto.`, 404);
       }
    
       return product;

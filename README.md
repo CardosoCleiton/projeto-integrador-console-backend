@@ -21,7 +21,7 @@
 - [x] Buscar produto por ID.
 - [x] Listar Todos os produtos.
 - [x] Atualizar um produto.
-- [ ] Listar Produtos por categoria.
+- [x] Listar Produtos por categoria.
 
 **Pedido:**
 - [x] Criar Pedido - Apenas quando usuário estiver logado.
