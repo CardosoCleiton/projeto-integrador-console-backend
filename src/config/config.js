@@ -8,4 +8,8 @@ const mercadoPagoConfig = {
    accessToken: process.env.MP_ACCESS_TOKEN ?? ""
 }
 
-module.exports = { freightConfig, mercadoPagoConfig }
+const appConfig = {
+   port: process.env.APP_PORT
+}
+
+module.exports = { freightConfig, mercadoPagoConfig, appConfig }

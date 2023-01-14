@@ -6,6 +6,7 @@ const { AppError } = require("./error/AppError");
 const { sequelize } = require("./database/sequelize");
 const { resolve } = require("path");
 const cors = require("cors");
+const { appConfig } = require("./config/config");
 require("./database/associations");
 
 
@@ -30,7 +31,7 @@ app.use((error, request, response, next) => {
 
 });
 
-app.listen(3333, async () => {
+app.listen(appConfig.port, async () => {
    await sequelize.sync();
-   console.log("Servidor iniciado!");
+   console.log(`Servidor iniciado na porta ${appConfig.port}!`);
 });
