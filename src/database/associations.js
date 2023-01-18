@@ -36,7 +36,7 @@ ImageProduct.belongsTo(Product);
 User.hasMany(Order);
 Order.belongsTo(User);
 //1 pedido possui 1 endereço, e um endereço pode pertence a varios pedidos.
-Address.hasMany(Address);
+Address.hasMany(Order);
 Order.belongsTo(Address);
 //1 pedido possui varios items de pedido, e 1 item de pedido pertence a 1 pedido
 Order.hasMany(OrderItem);

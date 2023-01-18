@@ -51,10 +51,19 @@ class ListProductsByCategoryService{
          ]
       });
 
+      const total = await Product.count({
+         where: {
+            stock: {
+               [Op.gt]: 0
+            }
+         }
+      });
+      
       let next = true;
-      if(offset + limit >= products.count){
+      if(offset + limit >= total){
          next = false;
       }
+
 
       const result = {
          next: next,

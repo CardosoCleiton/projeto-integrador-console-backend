@@ -32,7 +32,7 @@ class CalculateFreightService{
             throw new AppError("Erro ao buscar produto");
          }
       }
-
+      console.log("Chegou Aqui");
       const freight = new Freight();
       const priceFreightProducts = [];
 

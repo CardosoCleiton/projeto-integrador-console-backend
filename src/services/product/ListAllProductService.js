@@ -24,7 +24,8 @@ class ListAllProductService{
          attributes: ["id", "name", "description", "price", "createdAt", "updatedAt", "packagingId", "categoryId"],
          include: [{
             model: ImageProduct,
-            attributes: ["id", "name"]
+            attributes: ["id", "name"],
+            required: false
          }],
          where: {
             stock: {
@@ -36,9 +37,17 @@ class ListAllProductService{
             ['updatedAt', 'desc']
          ]
       });
+
+      const total = await Product.count({
+         where: {
+            stock: {
+               [Op.gt]: 0
+            }
+         }
+      });
       
       let next = true;
-      if(offset + limit >= products.count){
+      if(offset + limit >= total){
          next = false;
       }
 
