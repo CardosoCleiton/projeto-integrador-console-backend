@@ -4,7 +4,15 @@ const { Category } = require("../../database/models/Category");
 const { AppError } = require("../../error/AppError");
 
 class CreateCategoryService{
-   async execute(name){
+   async execute({name, plural_name, icon}){
+         console.log("Chegou AQUI");
+      if(!name){
+         throw new Error("Obrigátorio informar um nome para a categoria!");
+      }
+
+      if(!plural_name){
+         throw new Error("Obrigátorio informar o nome no plural para a categoria!");
+      }
       
       const categoryAlreadyExists = await Category.findOne({
          where: {
@@ -22,7 +30,9 @@ class CreateCategoryService{
       const category = await Category.create({
          name,
          id,
-         slug
+         slug,
+         icon_category: icon,
+         plural_name
       });
 
       return category;

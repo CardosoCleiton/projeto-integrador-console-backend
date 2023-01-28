@@ -14,6 +14,13 @@ const Category = sequelize.define("category", {
    slug: {
       type: DataTypes.STRING,
       allowNull: false
+   },
+   icon_category: {
+      type: DataTypes.STRING
+   },
+   plural_name: {
+      type: DataTypes.STRING,
+      allowNull: false
    }
 });
 

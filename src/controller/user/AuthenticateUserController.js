@@ -3,6 +3,8 @@ const { AuthenticateUserService } = require("../../services/user/AuthenticateUse
 class AuthenticateUserController{
    async handle(request, response){
       const { email, password } = request.body;
+
+      console.log(email, password);
       
       const authenticateUserService = new AuthenticateUserService();
       const tokenUser = await authenticateUserService.execute(email, password);

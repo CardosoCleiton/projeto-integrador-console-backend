@@ -4,7 +4,9 @@ class GetProfileService {
    async execute(id){
         console.log("chegou"+id);
         const user = await User.findByPk(id);
-        return user;
+        return {
+            user: user
+        };
     }
 }
 
