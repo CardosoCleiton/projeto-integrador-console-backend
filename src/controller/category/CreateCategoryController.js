@@ -3,7 +3,6 @@ const { CreateCategoryService } = require("../../services/category/CreateCategor
 class CreateCategoryController{
    async handle(request, response){
       const { name, plural_name } = request.body;
-      console.log({name, plural_name});
       const icon = request.file.filename;
       const createCategoryService = new CreateCategoryService();
       const category = await createCategoryService.execute({name, plural_name, icon});
