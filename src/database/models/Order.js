@@ -3,9 +3,9 @@ const { sequelize } = require("../sequelize");
 
 const Order = sequelize.define("order", {
    id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
    },
    date_request: {
       type: DataTypes.DATE,

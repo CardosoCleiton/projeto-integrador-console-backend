@@ -59,33 +59,43 @@ class CreateOrderService{
       //Calculando frete
       for(let i = 0; i < products.length; i++){
         const freightService = new Freight();
-        const freightPrice = await freightService.calculateDeadline({
-          sCepOrigem: freightConfig.cepOrigin,
-          nCdServico: freight.freightType,
-          sCepDestino: address.cep,
-          nVlPeso: parseFloat(products[i].weight) + parseFloat(products[i].packaging.weight),
-          nCdFormato: products[i].packaging.format,
-          nVlComprimento: products[i].packaging.length,
-          nVlAltura: products[i].packaging.height,
-          nVlLargura: products[i].packaging.width,
-          nVlDiametro: products[i].packaging.diameter
-        });
-        products[i].freight = parseFloat(freightPrice[0].Valor.replace(",", "."));
+        try{
+          const freightPrice = await freightService.calculateDeadline({
+            sCepOrigem: freightConfig.cepOrigin,
+            nCdServico: freight.freightType,
+            sCepDestino: address.cep,
+            nVlPeso: parseFloat(products[i].weight) + parseFloat(products[i].packaging.weight),
+            nCdFormato: products[i].packaging.format,
+            nVlComprimento: products[i].packaging.length,
+            nVlAltura: products[i].packaging.height,
+            nVlLargura: products[i].packaging.width,
+            nVlDiametro: products[i].packaging.diameter
+          })
+          products[i].freight = parseFloat(freightPrice[0].Valor.replace(",", "."));
+        }catch(error){
+          transaction.rollback();
+          throw new AppError("Erro inesperado ao calcular frete. Tente novamente mais tarde.");
+        }
       }
       
       //calculando valor total dos produtos.
       const totalPriceProduct = products.reduce((accumulator, currentValue) => {
         return accumulator + ((currentValue.price + currentValue.freight) * currentValue.quantity)
       }, 0);
-
+      console.log("VALOR TOTAL: " + totalPriceProduct);
       //Realizando pedido mercado pago.
       const mercadoPago = new MercadoPago();
+      // const paymentApiResponse = await mercadoPago.payApi(totalPriceProduct, paymentData);
       const paymentResponse = await mercadoPago.pay(totalPriceProduct, paymentData);
+      console.log("GEROU O PEDIDO");
+      if(!paymentResponse.date_approved){
+        transaction.rollback();
+        throw new AppError(`Pagamento não autorizado. Motivo: ${paymentResponse.status_detail}`);
+      }
 
-      //Criando Pedido
       try{
+        //Criando Pedido
         const order = await Order.create({
-          id: uuidV4(),
           date_request: new Date(),
           payment_id: paymentResponse.id,
           payment_status: paymentResponse.status,
@@ -150,8 +160,8 @@ class CreateOrderService{
 
         return orderResponse;
       }catch(error){
-        console.error(error);
         transaction.rollback();
+        throw new AppError("Erro ao processar pagamento.");
       }
    }
 }

@@ -32,12 +32,12 @@ class CalculateFreightService{
             throw new AppError("Erro ao buscar produto");
          }
       }
-      console.log("Chegou Aqui");
+   
       const freight = new Freight();
       const priceFreightProducts = [];
 
       for(let priceFreightProduct of products){
-
+         console.log("Chegou AQUI");
          const freightInfoSedex = await freight.calculateDeadline({
             sCepOrigem: freightConfig.cepOrigin,
             nCdServico: freightConfig.sedexCode,
@@ -49,7 +49,7 @@ class CalculateFreightService{
             nVlLargura: priceFreightProduct.packaging.width,
             nVlDiametro: priceFreightProduct.packaging.diameter
          });
-
+         
          if(freightInfoSedex[0].MsgErro){
             throw new AppError(freightInfoSedex[0].MsgErro);
          }
@@ -60,10 +60,10 @@ class CalculateFreightService{
             price: parseFloat(freightInfoSedex[0].Valor.replace(",", ".")) * priceFreightProduct.quantity,
             deadline: freightInfoSedex[0].PrazoEntrega
          };
-
+         
          const indexSedex = priceFreightProducts.findIndex(element => element.typeId === priceSedex.typeId);
          if(indexSedex >= 0){
-            priceFreightProducts[indexSedex].price = priceFreightProducts[indexSedex].price + priceSedex.price;
+            priceFreightProducts[indexSedex].price += priceSedex.price;
          }else{
             priceFreightProducts.push(priceSedex);
          }
@@ -93,7 +93,7 @@ class CalculateFreightService{
 
          const indexPac = priceFreightProducts.findIndex(element => element.typeId === pricePac.typeId);
          if(indexSedex >= 0){
-            priceFreightProducts[indexPac].price = priceFreightProducts[indexPac].price + pricePac.price;
+            priceFreightProducts[indexPac].price += + pricePac.price;
          }else{
             priceFreightProducts.push(pricePac);
          }
