@@ -35,10 +35,16 @@ class ListProductsByCategoryService{
          limit: limit,
          offset: offset,
          attributes: ["id", "name", "description", "price", "createdAt", "updatedAt", "packagingId", "categoryId"],
-         include: [{
-            model: ImageProduct,
-            attributes: ["id", "name"]
-         }],
+         include: [
+            {
+               model: ImageProduct,
+               attributes: ["id", "name"]
+            },
+            {
+               model: Category,
+               attributes: ["name", "slug", "plural_name"]
+            }
+         ],
          where: {
             stock: {
                [Op.gt]: 0
@@ -55,7 +61,8 @@ class ListProductsByCategoryService{
          where: {
             stock: {
                [Op.gt]: 0
-            }
+            },
+            categoryId: category.id
          }
       });
       
@@ -82,7 +89,8 @@ class ListProductsByCategoryService{
                      id: image.id,
                      name: image.name
                   }
-               })
+               }),
+               category: product.category
             }
          })
       }

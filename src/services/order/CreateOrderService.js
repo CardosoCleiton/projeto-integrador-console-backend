@@ -82,18 +82,18 @@ class CreateOrderService{
       const totalPriceProduct = products.reduce((accumulator, currentValue) => {
         return accumulator + ((currentValue.price + currentValue.freight) * currentValue.quantity)
       }, 0);
-      console.log("VALOR TOTAL: " + totalPriceProduct);
-      //Realizando pedido mercado pago.
-      const mercadoPago = new MercadoPago();
-      // const paymentApiResponse = await mercadoPago.payApi(totalPriceProduct, paymentData);
-      const paymentResponse = await mercadoPago.pay(totalPriceProduct, paymentData);
-      console.log("GEROU O PEDIDO");
-      if(!paymentResponse.date_approved){
-        transaction.rollback();
-        throw new AppError(`Pagamento não autorizado. Motivo: ${paymentResponse.status_detail}`);
-      }
-
+      
       try{
+        //Realizando pedido mercado pago.
+        const mercadoPago = new MercadoPago();
+        // const paymentApiResponse = await mercadoPago.payApi(totalPriceProduct, paymentData);
+        const paymentResponse = await mercadoPago.pay(parseFloat(totalPriceProduct.toFixed(2)), paymentData);
+        
+        if(!paymentResponse.date_approved){
+          transaction.rollback();
+          throw new AppError(`Pagamento não autorizado. Motivo: ${paymentResponse.status_detail}`);
+        }
+
         //Criando Pedido
         const order = await Order.create({
           date_request: new Date(),
